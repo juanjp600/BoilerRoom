@@ -38,7 +38,6 @@
       ],
       "dependencies": [
         "mediawiki.jqueryMsg", 
-        "mediawiki.notify", 
         "mediawiki.notification"
       ]
     }

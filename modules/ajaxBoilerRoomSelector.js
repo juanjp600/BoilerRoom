@@ -6,21 +6,20 @@ var boilerRoom = boilerRoom || {
    */
   initializeAjaxSelector : function() {
     mw.loader.using( 'user.options', function() {
-      if ( mw.user.options.get( 'usebetatoolbar' ) ) {
+      if ( $( '#toolbar' ).length > 0 ) {
+        $( '#toolbar' ).append('<div id="boilerRoomSelectorContainer" style="margin-top: -22px;"></div>');
+        boilerRoom.continueInitializeAjaxSelector();
+      } else if ( $( '#wpTextbox1' ).length > 0 ) {
+        $( '#wpTextbox1' ).before('<div id="boilerRoomSelectorContainer"></div>');
+        boilerRoom.continueInitializeAjaxSelector();
+      } else {
         $.when(
-				  mw.loader.using( 'ext.wikiEditor' ), $.ready
-			  ).then( function () {
+          mw.loader.using( 'ext.wikiEditor' ), $.ready
+        ).then( function () {
           $( '#wikiEditor-ui-toolbar' ).prepend(
             '<div id="boilerRoomSelectorContainer" style="float: right; line-height: 22px; margin: 5px;"></div>');
           boilerRoom.continueInitializeAjaxSelector();
         } );
-      } else {
-        if ( $( '#toolbar' ).length > 0 ) {
-          $( '#toolbar' ).append('<div id="boilerRoomSelectorContainer" style="margin-top: -22px;"></div>');
-        } else {
-          $( '#wpTextbox1' ).before('<div id="boilerRoomSelectorContainer"></div>');
-        }
-        boilerRoom.continueInitializeAjaxSelector();
       }
     } );
   },

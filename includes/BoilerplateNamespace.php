@@ -91,7 +91,7 @@ class BoilerplateNamespace {
    * @return Array All titles of pages in the Boilerplate namespace, sans namespace.
   */
   public function getAllBoilerplateTitles() {
-    $dbr = wfGetDB( DB_SLAVE );
+    $dbr = wfGetDB( DB_REPLICA );
 
     $results = $dbr->select( 'page',
                              'page_title',
