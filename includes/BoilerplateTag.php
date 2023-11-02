@@ -47,7 +47,7 @@ class BoilerplateTag {
   
   /**
    * Adds the parser hook for the <boilerplate>, <openboilerplate>, and <closeboilerplate> tags, though this is done 
-   * just to register the tag with MediaWiki, as the tag is actually processed in the ParserBeforeStrip hook and in the 
+   * just to register the tag with MediaWiki, as the tag is actually processed in the ParserBeforeInternalParse hook and in the 
    * template callback set up by this function.
    * @param Parser $parser The parser object
    * @return bool true to indicate there were no problems.
@@ -62,7 +62,7 @@ class BoilerplateTag {
   }
   
   /**
-   * Is hooked to ParserBeforeStrip to catch the content of the page.  While it also
+   * Is hooked to ParserBeforeInternalParse to catch the content of the page.  While it also
    * catches other things, the effect of this extension's processing is harmless.
    * @param Parser $parser The parser object.
    * @param string $text The text currently being parsed.

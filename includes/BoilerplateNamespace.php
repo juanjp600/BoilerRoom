@@ -1,5 +1,7 @@
 <?php
 
+use MediaWiki\Revision\RevisionRecord;
+
 /**
  * This creates the Boilerplate and Boilerplate talk namespaces and includes a number
  * of utility functions related to the Boilerplate namespace.
@@ -58,7 +60,7 @@ class BoilerplateNamespace {
    * the query string), this determines the title.  It's designed to default all titles
    * without an explicitly declared namespace to the Boilerplate namespace.  If there is
    * no boilerplate requested or the title doesn't exist, it returns false.
-   * @return Title The boilerplate title from the web request.
+   * @return Title The boilerplate title from the web request.Title
    */
   public function getRequestedBoilerplateTitle( ) {
     return $this->boilerplateTitleFromText( $this->mContext->getRequest()->getText( 'boilerplate' ) );
@@ -122,7 +124,7 @@ class BoilerplateNamespace {
         return new BoilerplatePage( wfMessage( $boilerplateTitle->getText() )->text() );
       } if ( isset( $boilerplateTitle ) && $boilerplateTitle->exists() ) {
         $boilerplateWikiPage = WikiPage::newFromId( $boilerplateTitle->getArticleId() );
-        return new BoilerplatePage( $boilerplateWikiPage->getContent( Revision::RAW )->getNativeData() );
+        return new BoilerplatePage( $boilerplateWikiPage->getContent( RevisionRecord::RAW )->getNativeData() );
       } else {
         return null;
       }

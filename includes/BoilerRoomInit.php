@@ -23,7 +23,7 @@ class BoilerRoomInit {
     define("NS_BOILERPLATE_TALK", $wgbrNamespaceIndex + 1);
     
     $wgHooks['ParserFirstCallInit'][] = Array( BoilerplateTag::getInstance(), 'initialize' );
-    $wgHooks['ParserBeforeStrip'][] = Array( BoilerplateTag::getInstance(), 'processPage' );
+    $wgHooks['ParserBeforeInternalParse'][] = Array( BoilerplateTag::getInstance(), 'processPage' );
     $wgHooks['EditFormPreloadText'][] = Array ( BoilerplateNamespace::getInstance(), 'preloadOnNewPage' );
 
     $wgHooks['ParserFirstCallInit'][] = Array( BoilerRoomBoxHooks::getInstance(), 'parserFunctionAndTagSetup' );
