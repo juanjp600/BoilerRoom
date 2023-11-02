@@ -280,12 +280,56 @@ var boilerRoom = boilerRoom || {
     editarea.focus();
   },
 
+  insertAtCursorCodeMirror : function( textarea, content, codeMirrorElement ) {
+    let codeMirrorLines = codeMirrorElement.getElementsByClassName("CodeMirror-lines")[0];
+    let selection = document.getSelection();
+    //if (selection.rangeCount == 0) { return; }
+
+    let nodeAndOffsetToIndexInText = function(node, index) {
+      let codeMirrorLines = document.body.getElementsByClassName("CodeMirror-lines")[0];
+      while (node !== codeMirrorLines) {
+        if (node === document.body || node === null) { return -1; }
+        while (true) {
+          if (node.previousSibling === null) { break; }
+          node = node.previousSibling;
+          let codeOnlyElements = node.nodeType === Node.ELEMENT_NODE ? node.getElementsByClassName("CodeMirror-line") : [];
+          let cleanText = codeOnlyElements.length > 0
+            ? codeOnlyElements[0].innerText + "."
+            : node.nodeType === Node.ELEMENT_NODE
+              ? node.getElementsByClassName("CodeMirror-linenumber").length === 0
+                ? node.innerText
+                : ""
+              : node.textContent;
+          cleanText = cleanText.replace("\r", "").replace("\n", "").replace("\u8203", "");
+          index += cleanText.length;
+        }
+        node = node.parentNode;
+      }
+      return index;
+    }
+
+    let start = nodeAndOffsetToIndexInText(selection.getRangeAt(0).startContainer, selection.getRangeAt(0).startOffset);
+    let end = nodeAndOffsetToIndexInText(selection.getRangeAt(0).endContainer, selection.getRangeAt(0).endOffset);
+    let insertText = boilerRoom.createInsertText( content, textarea.val().substring( start, end ) );
+      textarea.val( textarea.val().substring( 0, start ) +
+                    insertText.text +
+                    textarea.val().substring( end, textarea.val().length )
+                  );
+    boilerRoom.selectRange( textarea, start + insertText.selectionStart, start + insertText.selectionEnd );
+  },
+
   /**
    * Performs the steps needed to insert text at the cursor position in a textarea.
    * @param {element} textarea The textarea element to insert text into.
    * @param {string} content The text to insert into the textarea.
    */
   insertAtCursor : function( textarea, content ) {
+    let codeMirrorElements = document.body.getElementsByClassName("CodeMirror");
+    if (codeMirrorElements.length > 0) {
+      boilerRoom.insertAtCursorCodeMirror(textarea, content, codeMirrorElements[0]);
+      return;
+    }
+
     var selection, start, end, insertText;
     if ( typeof( document.selection ) !== "undefined" ) {
       textarea.focus();
